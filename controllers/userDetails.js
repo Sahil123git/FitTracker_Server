@@ -6,7 +6,7 @@ export const userDetails = async (req, res, next) => {
     const response = await User.findById(userId);
     return res.status(200).json({
       data: response,
-      message: "Workouts added successfully",
+      message: "User fetched successfully",
     });
   } catch (err) {
     console.error(err);

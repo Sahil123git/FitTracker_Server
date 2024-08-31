@@ -18,10 +18,9 @@ export const addWorkout = async (req, res, next) => {
       !workout.weight ||
       !workout.duration
     ) {
-      console.log("error created");
       return next(createError(400, "Some fields are missing"));
     }
-    console.log("here after");
+
     workout.caloriesBurned = calculateCaloriesBurnt(workout);
     const response = await Workout.create({ ...workout, user: userId });
 
@@ -75,6 +74,17 @@ export const getWorkoutsByDate = async (req, res, next) => {
 export const editWorkout = async (req, res, next) => {
   try {
     const workout = req.body;
+    if (
+      !workout.category ||
+      !workout.workoutName ||
+      !workout.sets ||
+      !workout.reps ||
+      !workout.weight ||
+      !workout.duration
+    ) {
+      return next(createError(400, "Some fields are missing"));
+    }
+
     workout.caloriesBurned = calculateCaloriesBurnt(workout);
     const resp = await Workout.findByIdAndUpdate(workout._id, { ...workout });
     return res.status(201).json({
