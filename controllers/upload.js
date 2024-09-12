@@ -1,4 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
+import { Readable } from "stream";
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -6,22 +8,29 @@ cloudinary.config({
 });
 export const uploadResource = async (req, res, next) => {
   try {
-    console.log(req.file);
-    cloudinary.uploader.upload(req.file.path, function (err, result) {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({
-          success: false,
-          message: "Error",
-        });
-      }
+    const bufferStream = new Readable();
+    bufferStream.push(req.file.buffer);
+    bufferStream.push(null); // Indicate end of stream
 
-      return res.status(200).json({
-        success: true,
-        message: "Uploaded!",
-        data: result.url,
+    // Create a Cloudinary upload stream and handle the response
+    const uploadFromBuffer = () => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "resource" },
+          (error, result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(error);
+            }
+          }
+        );
+        bufferStream.pipe(stream); // Pipe the buffer stream to Cloudinary's upload stream
       });
-    });
+    };
+
+    const result = await uploadFromBuffer();
+    return res.status(200).json({ imageUrl: result.url });
   } catch (err) {
     next(err);
   }

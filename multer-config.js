@@ -1,9 +1,5 @@
 import multer from "multer";
-const storage = multer.diskStorage({
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-
+const storage = multer.memoryStorage(); // store image in memory will not create temporary files
 const upload = multer({ storage: storage });
+
 export default upload;
