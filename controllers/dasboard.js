@@ -3,7 +3,6 @@ import Workout from "../models/Workout.js";
 
 export const getUserDashboard = async (req, res, next) => {
   try {
-    console.log("reached here ");
     const userId = req.user?.id;
     const user = await User.findById(userId);
     if (!user) {

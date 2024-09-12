@@ -2,18 +2,20 @@ import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
+import bodyParser from "body-parser";
 import UserRoutes from "./routes/user.js";
 
 dotenv.config();
 const app = express();
 const corsOptions = {
-  origin: "http://localhost:3000", // Allow requests from this origin
-  methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-  // allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
 };
 app.use(cors(corsOptions));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true })); // for form data
+
 app.use("/api", UserRoutes);
 // error handler
 app.use((err, req, res, next) => {

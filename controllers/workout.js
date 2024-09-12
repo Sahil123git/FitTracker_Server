@@ -35,6 +35,7 @@ export const addWorkout = async (req, res, next) => {
 export const getWorkoutsByDate = async (req, res, next) => {
   try {
     const userId = req.user?.id;
+    console.log({ userId });
     const user = await User.findById(userId);
     const dateString = req.query.date
       ? req.query.date
@@ -56,7 +57,7 @@ export const getWorkoutsByDate = async (req, res, next) => {
     );
 
     const todaysWorkouts = await Workout.find({
-      userId: userId,
+      user: userId,
       date: { $gte: startOfDay, $lt: endOfDay },
     });
     const totalCaloriesBurnt = todaysWorkouts.reduce(
