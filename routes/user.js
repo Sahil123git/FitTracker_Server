@@ -8,7 +8,6 @@ import { uploadResource } from "../controllers/upload.js";
 import upload from "../multer-config.js";
 const router = express.Router();
 
-console.log("reached here and called");
 router.post("/upload", upload.single("resource"), uploadResource);
 router.use("/auth", auth);
 router.use("/workout", workout);
