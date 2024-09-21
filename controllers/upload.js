@@ -28,9 +28,8 @@ export const uploadResource = async (req, res, next) => {
         bufferStream.pipe(stream); // Pipe the buffer stream to Cloudinary's upload stream
       });
     };
-
     const result = await uploadFromBuffer();
-    return res.status(200).json({ imageUrl: result.url });
+    return res.status(200).json({ imageUrl: result.secure_url });
   } catch (err) {
     next(err);
   }
