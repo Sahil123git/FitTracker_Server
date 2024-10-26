@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const BlogSchema = new mongoose.Schema(
   {
     heading: { type: String },
+    shortDes: { type: String, default: "" },
     content: {
       type: Array,
     },
