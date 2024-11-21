@@ -17,7 +17,6 @@ export const userDetails = async (req, res, next) => {
 export const updateUser = async (req, res) => {
   try {
     const userId = req.params?.id;
-    console.log({ userId, resp: req.body });
     const resp = await User.findByIdAndUpdate(userId, req.body, { new: true });
     return res.status(200).json({
       data: resp,

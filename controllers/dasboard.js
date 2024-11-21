@@ -53,7 +53,7 @@ export const getUserDashboard = async (req, res, next) => {
         },
       },
     ]);
-
+    
     //Format category data for pie chart
 
     const pieChartData = categoryCalories.map((category, index) => ({
