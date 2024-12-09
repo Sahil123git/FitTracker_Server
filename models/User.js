@@ -31,6 +31,9 @@ const UserSchema = new mongoose.Schema(
     weight: {
       type: Number,
     },
+    fitnessGoal: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
