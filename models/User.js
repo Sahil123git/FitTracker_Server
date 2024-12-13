@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema(
       type: Number,
     },
     height: {
-      type: Number,
+      type: Object,
     },
     gender: {
       type: String,
