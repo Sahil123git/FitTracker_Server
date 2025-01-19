@@ -3,19 +3,26 @@ import Reactions from "../models/Reactions.js";
 
 export const getBlogs = async (req, res, next) => {
   try {
-    const { page = 1, limit = 3 } = req.query; // Default page 1 and limit 3 if not provided
-    // Ensure page and limit are numbers
+    const { page = 1, limit = 3, query = "", sort = 1 } = req.query; // Default page 1 and limit 3 if not provided
+    // // Ensure page and limit are numbers
     const pageNumber = parseInt(page, 10);
     const limitNumber = parseInt(limit, 10);
 
-    const response = await Blogs.find(
-      {},
-      { heading: 1, likes: 1, dislikes: 1, shortDesc: 1 }
-    )
+    // Construct a search filter
+    const searchFilter = query
+      ? { heading: { $regex: query, $options: "i" } } // Case-insensitive search on the 'heading' field
+      : {};
+    const sortFilter = sort ? { [sort]: 1 } : {}; // Sort in ascending order, add '-1' for descending if needed
+    const response = await Blogs.find(searchFilter, {
+      heading: 1,
+      likes: 1,
+      dislikes: 1,
+      shortDesc: 1,
+    })
+      .sort(sortFilter) // Apply sorting
       .skip((pageNumber - 1) * limitNumber) // Skip documents for previous pages
-      .limit(limitNumber); // Limit the number of documents per request
-
-    const totalBlogs = await Blogs.countDocuments(); // Total count for client-side calculations
+      .limit(limitNumber);
+    const totalBlogs = await Blogs.countDocuments(searchFilter); // Total count for client-side calculations
 
     return res.status(200).json({
       data: response,
